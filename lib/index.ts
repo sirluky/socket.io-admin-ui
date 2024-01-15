@@ -357,12 +357,14 @@ const registerVerboseListeners = (
     );
 
     socket.conn.on("upgrade", (transport: any) => {
-      socket.data._admin.transport = transport.name;
-      adminNamespace.emit("socket_updated", {
-        id: socket.id,
-        nsp: nsp.name,
-        transport: transport.name,
-      });
+      if (socket.data?._admin) {
+        socket.data._admin.transport = transport.name;
+        adminNamespace.emit("socket_updated", {
+          id: socket.id,
+          nsp: nsp.name,
+          transport: transport.name,
+        });
+      }
     });
 
     if (nsp !== adminNamespace) {
